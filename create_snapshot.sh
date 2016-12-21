@@ -65,7 +65,7 @@ fi
 THIS_INSTSANCE_UUID="$(dmidecode --string system-uuid | tr '[:upper:]' '[:lower:]')"
 
 # snapshot names will sort by date, hostname and UUID.
-SNAPSHOT_NAME="backup-snapshot-$(date "+%Y%m%d-%H:%M")-$(hostname)-${THIS_INSTSANCE_UUID}"
+SNAPSHOT_NAME="backup-snapshot-$(date "+%Y%m%d-%H:%M")-${BACKUP_TYPE}-$(hostname)-${THIS_INSTSANCE_UUID}"
 
 echo "INFO: Start OpenStack snapshot creation."
 
