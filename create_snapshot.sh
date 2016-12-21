@@ -47,6 +47,20 @@ else
   source "/root/.openstack_snapshotrc"
 fi
 
+# backup_type
+BACKUP_TYPE="${1}"
+
+if [[ -z "${BACKUP_TYPE}" ]]; then
+  BACKUP_TYPE="manual"
+fi
+
+# rotation of snapshots
+ROTATION="${2}"
+
+if [[ -z "${ROTATION}" ]]; then
+  ROTATION="7"
+fi
+
 # The nova UUID is accessible via dmidecode, but it's all caps.
 THIS_INSTSANCE_UUID="$(dmidecode --string system-uuid | tr '[:upper:]' '[:lower:]')"
 
@@ -55,10 +69,10 @@ SNAPSHOT_NAME="backup-snapshot-$(date "+%Y%m%d-%H:%M")-$(hostname)-${THIS_INSTSA
 
 echo "INFO: Start OpenStack snapshot creation."
 
-nova image-create "${THIS_INSTSANCE_UUID}" "${SNAPSHOT_NAME}"
+nova backup "${THIS_INSTSANCE_UUID}" "${SNAPSHOT_NAME}" "${BACKUP_TYPE}" "${ROTATION}"
 if [[ "$?" != 0 ]]; then
-  echo "ERROR: nova image-create \"${THIS_INSTSANCE_UUID}\" \"${SNAPSHOT_NAME}\" failed."
+  echo "ERROR: nova image-create \"${THIS_INSTSANCE_UUID}\" \"${SNAPSHOT_NAME}\" \"${BACKUP_TYPE}\" \"${ROTATION}\" failed."
   exit 1
 else
-  echo "SUCCESS: Image created and pending upload."
+  echo "SUCCESS: Backup image created and pending upload."
 fi
