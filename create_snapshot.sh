@@ -62,16 +62,16 @@ if [[ -z "${ROTATION}" ]]; then
 fi
 
 # The nova UUID is accessible via dmidecode, but it's all caps.
-THIS_INSTSANCE_UUID="$(dmidecode --string system-uuid | tr '[:upper:]' '[:lower:]')"
+THIS_INSTANCE_UUID="$(dmidecode --string system-uuid | tr '[:upper:]' '[:lower:]')"
 
 # snapshot names will sort by date, hostname and UUID.
-SNAPSHOT_NAME="backup-snapshot-$(date "+%Y%m%d-%H:%M")-${BACKUP_TYPE}-$(hostname)-${THIS_INSTSANCE_UUID}"
+SNAPSHOT_NAME="backup-snapshot-$(date "+%Y%m%d-%H:%M")-${BACKUP_TYPE}-$(hostname)-${THIS_INSTANCE_UUID}"
 
 echo "INFO: Start OpenStack snapshot creation."
 
-nova backup "${THIS_INSTSANCE_UUID}" "${SNAPSHOT_NAME}" "${BACKUP_TYPE}" "${ROTATION}"
+nova backup "${THIS_INSTANCE_UUID}" "${SNAPSHOT_NAME}" "${BACKUP_TYPE}" "${ROTATION}"
 if [[ "$?" != 0 ]]; then
-  echo "ERROR: nova image-create \"${THIS_INSTSANCE_UUID}\" \"${SNAPSHOT_NAME}\" \"${BACKUP_TYPE}\" \"${ROTATION}\" failed."
+  echo "ERROR: nova image-create \"${THIS_INSTANCE_UUID}\" \"${SNAPSHOT_NAME}\" \"${BACKUP_TYPE}\" \"${ROTATION}\" failed."
   exit 1
 else
   echo "SUCCESS: Backup image created and pending upload."
